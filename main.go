@@ -55,42 +55,42 @@ var stateRule = `
 	empty                = '';
 `
 
-var test = `
-state= {
-	id=99
-	name="STATE_99"
-	manpower = 1672235
-	resources={
-		aluminium=6 # was: 10
-	}
+// var test = `
+// state= {
+// 	id=99
+// 	name="STATE_99"
+// 	manpower = 1672235
+// 	resources={
+// 		aluminium=6 # was: 10
+// 	}
 
-	state_category = town
+// 	state_category = town
 
-	history=
-	{
-		owner = DEN
-		victory_points = {
-			6364 3
-		}
-		buildings = {
-			infrastructure = 8
-			industrial_complex = 3
-			air_base = 2
-			394 = {
-				naval_base = 3
-			}
-			6364 = {
-				naval_base = 1
-			}
-		}
-		add_core_of = DEN
-	}
-	provinces=
-	{
-316 332 394 399 3206 3277 3341 6235 6364 11251 	}
-}
+// 	history=
+// 	{
+// 		owner = DEN
+// 		victory_points = {
+// 			6364 3
+// 		}
+// 		buildings = {
+// 			infrastructure = 8
+// 			industrial_complex = 3
+// 			air_base = 2
+// 			394 = {
+// 				naval_base = 3
+// 			}
+// 			6364 = {
+// 				naval_base = 1
+// 			}
+// 		}
+// 		add_core_of = DEN
+// 	}
+// 	provinces=
+// 	{
+// 316 332 394 399 3206 3277 3341 6235 6364 11251 	}
+// }
 
-`
+// `
 
 var p *ptool.TParser
 
@@ -98,7 +98,7 @@ func main() {
 	var err error
 	p, err = ptool.NewBuilder().FromString(stateRule).Entries("entry").Build()
 	if err != nil {
-		fmt.Println("\nparser error: ", err)
+		fmt.Println("parser error: ", err)
 		return
 	}
 
@@ -111,30 +111,30 @@ func main() {
 
 	files, err := ioutil.ReadDir(".")
 	if err != nil {
-		fmt.Println("\nioutil.ReadDir error: ", err)
+		fmt.Println("ioutil.ReadDir error: ", err)
 		return
 	}
 
 	for _, file := range files {
 		if !file.IsDir() && strings.HasSuffix(file.Name(), ".txt") && file.Name() != "output.txt" {
-			fmt.Println("\n>>>>", file.Name())
 			f, err := readFile(file.Name())
 			if err != nil {
-				fmt.Println("\nreadFile error: ", err)
-				return
+				fmt.Println(file.Name()+": readFile error: ", err)
+				continue
 			}
-
-			fmt.Println(f)
+			// fmt.Println(f)
 			node, err := p.Parse(f)
 			if err != nil {
-				fmt.Println("\n*TParser.Parse error: ", err)
-				return
+				fmt.Println(file.Name()+": *TParser.Parse error: ", err)
+				continue
 			}
-			fmt.Println(ptool.TreeToString(node, p.ByID))
-			err = traverse(node, 0)
-			if err != nil {
-				fmt.Println(err)
-			}
+			_ = node
+			// fmt.Println(ptool.TreeToString(node, p.ByID))
+			// err = traverse(node, 0)
+			// if err != nil {
+			// 	fmt.Println(err)
+			// 	continue
+			// }
 		}
 	}
 
